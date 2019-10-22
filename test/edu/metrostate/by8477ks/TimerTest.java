@@ -3,8 +3,17 @@ package edu.metrostate.by8477ks;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Read the time between start and stop in millisecons.
+ * https://howtodoinjava.com/junit5/expected-exception-example/
+ * https://docs.oracle.com/javase/tutorial/java/data/numberformat.html
+ * https://www.techiedelight.com/measure-elapsed-time-execution-time-java/
+ * @author ezempel
+ */
 class TimerTest {
 
     Timer timer;
@@ -43,4 +52,32 @@ class TimerTest {
             timer.read();
         }, "Timer did not start as was expected");
     }
+
+    @Test
+    void testFunction(){
+        timer.start();
+        fail("This test is not written");
+    }
+
+    @Test
+    void testToString(){
+        assertEquals("Timer was not started", timer.toString(), "Timer should not have started");
+        timer.start();
+        System.out.println(timer); // timer not started
+        try {
+            TimeUnit.SECONDS.sleep(3);
+            timer.stop();
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(timer); // timer after 3 milliseconds
+
+    }
+
+    @Test
+    void testAccuracy(){
+        fail("Need to test if the timer is within 5 milliseconds of explected");
+    }
+
+
 }

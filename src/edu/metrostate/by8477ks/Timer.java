@@ -25,12 +25,21 @@ public class Timer {
     }
 
     public long read() throws Exception {
-        if(startTime < 0){
+        if (startTime < 0) {
             throw new Exception("Timer was not started");
         }
-        if(stopTime < 0){
+        if (stopTime < 0) {
             this.stop();
         }
         return stopTime - startTime;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return String.format("%d ms", this.read());
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 }
