@@ -53,11 +53,6 @@ class TimerTest {
         }, "Timer did not start as was expected");
     }
 
-    @Test
-    void testFunction(){
-        timer.start();
-        fail("This test is not written");
-    }
 
     @Test
     void testToString(){
@@ -76,7 +71,14 @@ class TimerTest {
 
     @Test
     void testAccuracy(){
-        fail("Need to test if the timer is within 5 milliseconds of explected");
+        timer.start();
+        try {
+            TimeUnit.SECONDS.sleep(3);
+            timer.stop();
+            assertTrue(timer.read() >= 3000 && timer.read() < 3005, timer.toString() + "is not between 3000 and 3005");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
