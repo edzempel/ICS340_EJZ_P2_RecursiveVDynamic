@@ -31,10 +31,10 @@ class DynamicATM {
 
         combinations[0] = 1;
 
-        for (int coin : bills) {
+        for (int bill : bills) {
             for (int i = 1; i < combinations.length; i++) {
-                if (i >= coin) {
-                    combinations[i] += combinations[i - coin];
+                if (i >= bill) {
+                    combinations[i] += combinations[i - bill];
                     //printAmount(combinations);
                 }
             }
