@@ -1,4 +1,4 @@
-package edu.metrostate.by8477ks;
+package edu.metrostate.by8477ks.atm;
 
 public class Timer {
     long startTime = -1;

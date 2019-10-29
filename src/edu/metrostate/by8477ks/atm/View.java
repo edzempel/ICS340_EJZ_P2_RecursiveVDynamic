@@ -1,4 +1,4 @@
-package edu.metrostate.by8477ks;
+package edu.metrostate.by8477ks.atm;
 
 import java.awt.Dimension;
 

@@ -1,4 +1,4 @@
-package edu.metrostate.by8477ks;
+package edu.metrostate.by8477ks.atm;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
