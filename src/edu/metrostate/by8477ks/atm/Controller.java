@@ -6,8 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -64,14 +63,14 @@ public class Controller implements ActionListener {
         // Prompt user for file with JFileChooser
         int returnVal = chooser.showOpenDialog(view.frame.getParent());
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File fileToSort = chooser.getSelectedFile();
-            if (!filter.accept(fileToSort)) {
+            File sourceFile = chooser.getSelectedFile();
+            if (!filter.accept(sourceFile)) {
                 throw new WrongFileTypeException("Wrong file type. Choose a .txt file.");
             }
-            String[] fullName = separateNameAndExtension(fileToSort);
+            String[] fullName = separateNameAndExtension(sourceFile);
             String fileName = fullName[0];
             String extension = fullName[1];
-            String fullPath = fileToSort.getPath();
+            String fullPath = sourceFile.getPath();
 
 
             // isolate directory from filename
@@ -80,20 +79,43 @@ public class Controller implements ActionListener {
             //update view
             view.tf1.setText("Input file: " + fileName + extension);
 
-            // Read file into memory
-            ArrayList<Integer> lineItems = readFileIntoMemory(fileToSort); // O(n)
-
+            // Read header into memory
+            ArrayList<Integer> header = readHeaderLine(sourceFile); // O(n)
+            // convert header into int[]
+            int[] intHeader = new int[header.size()];
+            for(int i = 0; i < header.size(); i++){
+                intHeader[i] = header.get(i);
+            }
+            // Reader rest of file into memory
+            ArrayList<Integer> listOfAmounts = readFileStartingAt(sourceFile, 1);
             // Convert ArrayList to int[] O(n)
-            int[] intArray = new int[lineItems.size()];
-            for (int i = 0; i < lineItems.size(); i++) {
-                intArray[i] = lineItems.get(i);
+            int[] intAmounts = new int[listOfAmounts.size()];
+            for (int i = 0; i < listOfAmounts.size(); i++) {
+                intAmounts[i] = listOfAmounts.get(i);
             }
 
-            // Sort array in place O(n lg n)
-//            Model.mergesort(intArray, 0, intArray.length);
+            Map<Integer, Integer> recurisvePairs = new HashMap<Integer, Integer>();
+            RecursiveATM recursiveATM = new RecursiveATM();
+            recursiveATM.setBills(intHeader);
+
+            // use recursive ATM
+            for(int amount : intAmounts){
+                recurisvePairs.put(amount, recursiveATM.rCombinations(amount, 0));
+            }
+
+            Set< Map.Entry< Integer,Integer> > st = recurisvePairs.entrySet();
+
+            for (Map.Entry< Integer,Integer> entry:st)
+            {
+                System.out.printf("$%d %d %s\n",entry.getKey(), entry.getValue(), "ms");
+            }
+
+
+            Map<Integer, Integer> dynamicPairs = new HashMap<Integer, Integer>();
+
 
             // Give the user feedback after successfully writing the sorted file
-            view.ta1.append("\n" + writeArrayToFile(directory, fileName + "_combinations" + extension, intArray)); // O(n)
+            view.ta1.append("\n" + writeArrayToFile(directory, fileName + "_combinations" + extension, intAmounts)); // O(n)
 
         }
     }
@@ -102,7 +124,7 @@ public class Controller implements ActionListener {
      * Returns an ArrayList of the values separated by spaces from the first line of the file
      *
      * @param userFile where the first line is a space delimited list of values
-     * @return
+     * @return list of values from the first line of the file
      * @throws FileNotFoundException
      * @throws NumberFormatException
      */
@@ -129,7 +151,7 @@ public class Controller implements ActionListener {
      * Reads file into memory as an ArrayList O(n)
      *
      * @param userFile File
-     * @return ArrayList Integer
+     * @return list of each of the lines in the file
      * @throws FileNotFoundException
      */
     public static ArrayList<Integer> readFileIntoMemory(File userFile) throws
@@ -182,6 +204,7 @@ public class Controller implements ActionListener {
      * @param directory String path to file
      * @param filename  String name of file
      * @param array     int[] data to be written to the file line by line
+     * @return name of output file
      * @throws UnsupportedEncodingException
      */
     public static String writeArrayToFile(String directory, String filename, int[] array) throws
