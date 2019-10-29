@@ -1,17 +1,21 @@
 package edu.metrostate.by8477ks.atm;
 
-// Java implementation to count ways
-// to sum up to a given value N
 
+/**
+ * Use dynamic programming to count the combinations of given values that total an amount
+ *
+ * @author ezempel
+ * based on code from https://www.youtube.com/watch?v=jaNZ83Q3QGc
+ */
 class DynamicATM {
-    /**
-     * You are given coins of different denominations and a total amount of money.
-     * Write a function to compute the number of combinations that make up that amount.
-     */
 
+    /**
+     * Test driver for DynamicATM
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         for (int i = 0; i < 200; i++)
-            System.out.printf("$%d has %d combinations\n", i, dCombinations(i, new int[]{ 5, 10, 20, 50, 100}));
+            System.out.printf("$%d has %d combinations\n", i, dCombinations(i, new int[]{5, 10, 20, 50, 100}));
     }
 
     /**
@@ -19,15 +23,15 @@ class DynamicATM {
      * Uncomment the prints for more detail.
      *
      * @param amount Total amount of money
-     * @param coins  Coins used to find different denominations
+     * @param bills  Bills used to add up to amount
      */
 
-    public static int dCombinations(int amount, int[] coins) {
+    public static int dCombinations(int amount, int[] bills) {
         int[] combinations = new int[amount + 1];
 
         combinations[0] = 1;
 
-        for (int coin : coins) {
+        for (int coin : bills) {
             for (int i = 1; i < combinations.length; i++) {
                 if (i >= coin) {
                     combinations[i] += combinations[i - coin];
@@ -47,8 +51,8 @@ class DynamicATM {
      */
 
     public static void printAmount(int[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
+        for (int value : arr) {
+            System.out.print(value + " ");
         }
         System.out.println();
     }
