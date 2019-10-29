@@ -11,6 +11,11 @@ public class CombinationEntry {
         this.duration = duration;
     }
 
+    public CombinationEntry(int amount, int combinations) {
+        this.amount = amount;
+        this.combinations = combinations;
+    }
+
     public int getAmount() {
         return amount;
     }
