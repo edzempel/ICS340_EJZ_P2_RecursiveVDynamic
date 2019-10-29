@@ -83,7 +83,7 @@ public class Controller implements ActionListener {
             ArrayList<Integer> header = readHeaderLine(sourceFile); // O(n)
             // convert header into int[]
             int[] intHeader = new int[header.size()];
-            for(int i = 0; i < header.size(); i++){
+            for (int i = 0; i < header.size(); i++) {
                 intHeader[i] = header.get(i);
             }
             // Reader rest of file into memory
@@ -94,38 +94,88 @@ public class Controller implements ActionListener {
                 intAmounts[i] = listOfAmounts.get(i);
             }
 
-//            Map<Integer, Integer> recurisvePairs = new HashMap<Integer, Integer>();
-            ArrayList<CombinationEntry> recursivePairs = new ArrayList<>();
-            RecursiveATM recursiveATM = new RecursiveATM();
-            recursiveATM.setBills(intHeader);
-
             Timer timer = new Timer();
-
-            // use recursive ATM
-            for(int amount : intAmounts){
-                timer.start();
-                CombinationEntry entry = new CombinationEntry(amount, recursiveATM.rCombinations(amount, 0));
-                timer.stop();
-                try {
-                    entry.setDuration(timer.read());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                recursivePairs.add(entry);
+            timer.start();
+            String outputFilename = recursiveCombinations(fileName, extension, directory, intHeader, intAmounts);
+            timer.stop();
+            view.ta1.append("\n" + outputFilename);
+            try {
+                view.ta1.append(String.format("\nRecursive: %dms", timer.read()));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-//            Set< Map.Entry< Integer,Integer> > st = recurisvePairs.entrySet();
-
-            for (CombinationEntry entry: recursivePairs)
-            {
-                System.out.printf("$%d %d %s ms\n",entry.getAmount(), entry.getCombinations(), entry.getDuration());
+            timer.start();
+            outputFilename = dynamicCombinations(fileName, extension, directory, intHeader, intAmounts);
+            timer.stop();
+            view.ta1.append("\n" + outputFilename);
+            try {
+                view.ta1.append(String.format("\nDynamic: %dms", timer.read()));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-
-            // Give the user feedback after successfully writing the sorted file
-            view.ta1.append("\n" + writeArrayToFile(directory, fileName + "_combinations" + extension, intAmounts)); // O(n)
 
         }
+    }
+
+    private String recursiveCombinations(String fileName, String extension, String directory, int[] intHeader, int[] intAmounts) throws UnsupportedEncodingException, FileNotFoundException {
+        ArrayList<CombinationEntry> recursivePairs = new ArrayList<>();
+        RecursiveATM recursiveATM = new RecursiveATM();
+        recursiveATM.setBills(intHeader);
+        Timer fullRecursionTimer = new Timer();
+        Timer recursiveTimer = new Timer();
+        // use recursive ATM
+        fullRecursionTimer.start();
+        for (int amount : intAmounts) {
+            recursiveTimer.start();
+            CombinationEntry entry = new CombinationEntry(amount, recursiveATM.rCombinations(amount, 0));
+            recursiveTimer.stop();
+            try {
+                entry.setDuration(recursiveTimer.read());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            recursivePairs.add(entry);
+        }
+        fullRecursionTimer.stop();
+
+        try {
+            System.out.printf("Full recursion time: %dms\n", fullRecursionTimer.read());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Give the user feedback after successfully writing the sorted file
+        return writeArrayToFile(directory, fileName + "_recursive" + extension, recursivePairs);
+    }
+
+    private String dynamicCombinations(String fileName, String extension, String directory, int[] intHeader, int[] intAmounts) throws UnsupportedEncodingException, FileNotFoundException {
+        ArrayList<CombinationEntry> dynamicPairs = new ArrayList<>();
+//        DynamicATM dynamicATM = new DynamicATM();
+
+        Timer fullDynamicTimer = new Timer();
+        Timer dynamicTimer = new Timer();
+        // use recursive ATM
+        fullDynamicTimer.start();
+        for (int amount : intAmounts) {
+            dynamicTimer.start();
+            CombinationEntry entry = new CombinationEntry(amount, DynamicATM.dCombinations(amount, intHeader));
+            dynamicTimer.stop();
+            try {
+                entry.setDuration(dynamicTimer.read());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            dynamicPairs.add(entry);
+        }
+        fullDynamicTimer.stop();
+
+        try {
+            System.out.printf("Full dynamic time: %dms\n", fullDynamicTimer.read());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Give the user feedback after successfully writing the sorted file
+        return writeArrayToFile(directory, fileName + "_dynamic" + extension, dynamicPairs);
     }
 
     /**
@@ -195,8 +245,7 @@ public class Controller implements ActionListener {
                 String data = myReader.nextLine();
                 lineItems.add(Integer.parseInt(data));
                 // System.out.println(data); // view each line of data
-            }
-            else{
+            } else {
                 myReader.nextLine();
             }
             lineCount++;
@@ -220,6 +269,16 @@ public class Controller implements ActionListener {
         PrintWriter writer = new PrintWriter(directory + filename, "UTF-8");
         for (int i = 0; i < array.length; i++) {
             writer.println(array[i]);
+        }
+        writer.close();
+        return String.format("Output file: %s", filename);
+    }
+
+    public static String writeArrayToFile(String directory, String filename, ArrayList<CombinationEntry> array) throws
+            UnsupportedEncodingException, FileNotFoundException {
+        PrintWriter writer = new PrintWriter(directory + filename, "UTF-8");
+        for (CombinationEntry entry : array) {
+            writer.println(String.format("%d %d %dms", entry.getAmount(), entry.getCombinations(), entry.getDuration()));
         }
         writer.close();
         return String.format("Output file: %s", filename);

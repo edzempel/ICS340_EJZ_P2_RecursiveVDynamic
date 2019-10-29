@@ -23,7 +23,8 @@ class DynamicATM {
      * Uncomment the prints for more detail.
      *
      * @param amount Total amount of money
-     * @param bills  Bills used to add up to amount
+     * @param bills  available bills/denominations
+     * @return combinations of bills that total the amount
      */
 
     public static int dCombinations(int amount, int[] bills) {
