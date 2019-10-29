@@ -26,7 +26,7 @@ class View {
 
     View() { // constructor
         // instantiate components, don't forget to set bounds
-        frame = new JFrame("Reverse Recursive Sort");
+        frame = new JFrame("New ATM");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel = new JPanel();
 
@@ -43,14 +43,14 @@ class View {
 
         ta1 = new JTextArea(10, 15);
         ta1.setAutoscrolls(true);
-        ta1.setText("Welcome to the recursive sorter!");
+        ta1.setText("Welcome to the new ATM!");
         ta1.append("\n--------------------------------");
 
         scrollPane = new JScrollPane(ta1);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setAutoscrolls(true);
 
-        l1 = new JLabel("Choose your source file to sort.");
+        l1 = new JLabel("Choose your source file.");
 
         //
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
