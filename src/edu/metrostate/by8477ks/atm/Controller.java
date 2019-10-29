@@ -94,24 +94,32 @@ public class Controller implements ActionListener {
                 intAmounts[i] = listOfAmounts.get(i);
             }
 
-            Map<Integer, Integer> recurisvePairs = new HashMap<Integer, Integer>();
+//            Map<Integer, Integer> recurisvePairs = new HashMap<Integer, Integer>();
+            ArrayList<CombinationEntry> recursivePairs = new ArrayList<>();
             RecursiveATM recursiveATM = new RecursiveATM();
             recursiveATM.setBills(intHeader);
 
+            Timer timer = new Timer();
+
             // use recursive ATM
             for(int amount : intAmounts){
-                recurisvePairs.put(amount, recursiveATM.rCombinations(amount, 0));
+                timer.start();
+                CombinationEntry entry = new CombinationEntry(amount, recursiveATM.rCombinations(amount, 0));
+                timer.stop();
+                try {
+                    entry.setDuration(timer.read());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                recursivePairs.add(entry);
             }
 
-            Set< Map.Entry< Integer,Integer> > st = recurisvePairs.entrySet();
+//            Set< Map.Entry< Integer,Integer> > st = recurisvePairs.entrySet();
 
-            for (Map.Entry< Integer,Integer> entry:st)
+            for (CombinationEntry entry: recursivePairs)
             {
-                System.out.printf("$%d %d %s\n",entry.getKey(), entry.getValue(), "ms");
+                System.out.printf("$%d %d %s ms\n",entry.getAmount(), entry.getCombinations(), entry.getDuration());
             }
-
-
-            Map<Integer, Integer> dynamicPairs = new HashMap<Integer, Integer>();
 
 
             // Give the user feedback after successfully writing the sorted file
