@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * https://howtodoinjava.com/junit5/expected-exception-example/
  * https://docs.oracle.com/javase/tutorial/java/data/numberformat.html
  * https://www.techiedelight.com/measure-elapsed-time-execution-time-java/
+ *
  * @author ezempel
  */
 class TimerTest {
@@ -55,7 +56,7 @@ class TimerTest {
 
 
     @Test
-    void testToString(){
+    void testToString() {
         assertEquals("Timer was not started", timer.toString(), "Timer should not have started");
         timer.start();
         System.out.println(timer); // timer not started
@@ -70,7 +71,7 @@ class TimerTest {
     }
 
     @Test
-    void testAccuracy(){
+    void testAccuracy() {
         timer.start();
         try {
             TimeUnit.SECONDS.sleep(3);
@@ -80,6 +81,5 @@ class TimerTest {
             e.printStackTrace();
         }
     }
-
 
 }

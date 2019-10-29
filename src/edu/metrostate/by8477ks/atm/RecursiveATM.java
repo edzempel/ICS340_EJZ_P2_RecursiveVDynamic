@@ -17,7 +17,7 @@ public class RecursiveATM {
 
     public static void main(String[] args) {
         for(int i = 0; i < 200; i++){
-        System.out.printf("$%d has %d combinations\n", i, new RecursiveATM().combinations(i, 0));}
+        System.out.printf("$%d has %d combinations\n", i, new RecursiveATM().rCombinations(i, 0));}
 
     }
 
@@ -27,7 +27,7 @@ public class RecursiveATM {
      * @param currentBill The starting bill in the
      * @return
      */
-    public int combinations(int amount, int currentBill) {
+    public int rCombinations(int amount, int currentBill) {
         if (amount == 0) // found valid combination
             return 1;
         if (amount < 0) // invalid combination
@@ -36,7 +36,7 @@ public class RecursiveATM {
         int nCombos = 0; // number of combinations
         // if above zero keep subtracting bills
         for (int bill = currentBill; bill < bills.length; bill++) { // for each of the possible bills starting at the current bill
-            nCombos += combinations(amount - bills[bill], bill); // recursive call combinations on the amount remaining after subtracting the current bill value and add that to the running total of combinations
+            nCombos += rCombinations(amount - bills[bill], bill); // recursive call combinations on the amount remaining after subtracting the current bill value and add that to the running total of combinations
         }
         return nCombos; // finally return the total combinations
     }

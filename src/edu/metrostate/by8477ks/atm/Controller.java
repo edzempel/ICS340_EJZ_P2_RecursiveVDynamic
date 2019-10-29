@@ -85,7 +85,7 @@ public class Controller implements ActionListener {
 
             // Convert ArrayList to int[] O(n)
             int[] intArray = new int[lineItems.size()];
-            for (int i = 0; i <lineItems.size(); i++) {
+            for (int i = 0; i < lineItems.size(); i++) {
                 intArray[i] = lineItems.get(i);
             }
 
@@ -93,9 +93,36 @@ public class Controller implements ActionListener {
 //            Model.mergesort(intArray, 0, intArray.length);
 
             // Give the user feedback after successfully writing the sorted file
-            view.ta1.append("\n" + writeArrayToFile(directory, fileName + "_sorted" + extension, intArray)); // O(n)
+            view.ta1.append("\n" + writeArrayToFile(directory, fileName + "_combinations" + extension, intArray)); // O(n)
 
         }
+    }
+
+    /**
+     * Returns an ArrayList of the values separated by spaces from the first line of the file
+     *
+     * @param userFile where the first line is a space delimited list of values
+     * @return
+     * @throws FileNotFoundException
+     * @throws NumberFormatException
+     */
+    public static ArrayList<Integer> readHeaderLine(File userFile) throws FileNotFoundException, NumberFormatException {
+        ArrayList<Integer> header = new ArrayList<Integer>();
+        Scanner myReader = new Scanner(userFile);
+        String firstLine = myReader.nextLine();
+        Scanner scanHeader = new Scanner(firstLine);
+        scanHeader.useDelimiter(" ");
+
+        while (scanHeader.hasNext()) {
+            String data = scanHeader.next();
+            header.add(Integer.parseInt(data));
+            // System.out.println(data); // view each element of the header
+        }
+
+        myReader.close();
+
+
+        return header;
     }
 
     /**
@@ -105,7 +132,8 @@ public class Controller implements ActionListener {
      * @return ArrayList Integer
      * @throws FileNotFoundException
      */
-    public static ArrayList<Integer> readFileIntoMemory(File userFile) throws FileNotFoundException, NumberFormatException {
+    public static ArrayList<Integer> readFileIntoMemory(File userFile) throws
+            FileNotFoundException, NumberFormatException {
         Scanner myReader = new Scanner(userFile);
         ArrayList<Integer> lineItems = new ArrayList<Integer>();
         while (myReader.hasNextLine()) {
@@ -119,6 +147,36 @@ public class Controller implements ActionListener {
     }
 
     /**
+     * Reads file into memory as an ArrayList O(n) starting at specified line
+     *
+     * @param userFile
+     * @param startingLine
+     * @return
+     * @throws FileNotFoundException
+     * @throws NumberFormatException
+     */
+    public static ArrayList<Integer> readFileStartingAt(File userFile, int startingLine) throws
+            FileNotFoundException, NumberFormatException {
+        Scanner myReader = new Scanner(userFile);
+        ArrayList<Integer> lineItems = new ArrayList<Integer>();
+        int lineCount = 0;
+        while (myReader.hasNextLine()) {
+            if (lineCount >= startingLine) {
+                String data = myReader.nextLine();
+                lineItems.add(Integer.parseInt(data));
+                // System.out.println(data); // view each line of data
+            }
+            else{
+                myReader.nextLine();
+            }
+            lineCount++;
+        }
+        myReader.close();
+        return lineItems;
+    }
+
+
+    /**
      * Write array of integers to the file in the specified directory. O(n)
      *
      * @param directory String path to file
@@ -126,7 +184,8 @@ public class Controller implements ActionListener {
      * @param array     int[] data to be written to the file line by line
      * @throws UnsupportedEncodingException
      */
-    public static String writeArrayToFile(String directory, String filename, int[] array) throws UnsupportedEncodingException, FileNotFoundException {
+    public static String writeArrayToFile(String directory, String filename, int[] array) throws
+            UnsupportedEncodingException, FileNotFoundException {
         PrintWriter writer = new PrintWriter(directory + filename, "UTF-8");
         for (int i = 0; i < array.length; i++) {
             writer.println(array[i]);
