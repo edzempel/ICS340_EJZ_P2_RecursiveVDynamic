@@ -42,6 +42,7 @@ class ControllerTest {
         try {
             int[] sourceHeader = {1, 5, 10, 20, 50, 100};
             ArrayList<Integer> firstLine = Controller.readHeaderLine(fin);
+            assertEquals(sourceHeader.length, firstLine.size());
             for (int i = 0; i < sourceHeader.length; i++) {
                 assertEquals(sourceHeader[i], firstLine.get(i));
             }
@@ -56,8 +57,9 @@ class ControllerTest {
     void readFileStartingAt() {
         try {
             int[] desired = {9, 8, 7, 6};
+            ArrayList<Integer> fileArray = Controller.readFileStartingAt(fin, 1);
+            assertEquals(desired.length, fileArray.size());
             for (int i = 0; i < desired.length; i++) {
-                ArrayList<Integer> fileArray = Controller.readFileStartingAt(fin, 1);
                 assertEquals(desired[i], fileArray.get(i));
             }
         } catch (FileNotFoundException e) {
