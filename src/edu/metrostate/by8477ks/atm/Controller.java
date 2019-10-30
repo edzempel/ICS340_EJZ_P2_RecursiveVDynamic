@@ -26,7 +26,7 @@ public class Controller implements ActionListener {
 
             // open and read file into memory as ArrayList
             try {
-                getSortAndWriteFile();
+                processFiles();
             } catch (WrongFileTypeException wftex) {
                 view.ta1.append("\n" + wftex.getMessage());
             } catch (NumberFormatException nfex) {
@@ -38,6 +38,8 @@ public class Controller implements ActionListener {
             } catch (UnsupportedEncodingException useex) {
                 view.ta1.append("\n!!! File encoding unsupported. Use UTF-8 file.\n" + useex.getMessage());
                 useex.printStackTrace();
+            } catch (P2Exceptions.ImproperHeaderFileException ex) {
+                view.ta1.append("\n!!! Improper header.\n" + ex.getMessage());
             }
             view.ta1.append("\n--------------------------------");
 //            view.scrollPane.getVerticalScrollBar().setValue(view.scrollPane.getVerticalScrollBar().getMaximum());
@@ -53,7 +55,7 @@ public class Controller implements ActionListener {
      * @throws UnsupportedEncodingException
      * @throws WrongFileTypeException
      */
-    private void getSortAndWriteFile() throws FileNotFoundException, UnsupportedEncodingException, WrongFileTypeException {
+    private void processFiles() throws FileNotFoundException, UnsupportedEncodingException, WrongFileTypeException, P2Exceptions.ImproperHeaderFileException {
         //JFileChooser only allows text files
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("*.txt", "txt", "text");
@@ -118,7 +120,7 @@ public class Controller implements ActionListener {
         }
     }
 
-    private String recursiveCombinations(String fileName, String extension, String directory, int[] intHeader, int[] intAmounts) throws UnsupportedEncodingException, FileNotFoundException {
+    private String recursiveCombinations(String fileName, String extension, String directory, int[] intHeader, int[] intAmounts) throws UnsupportedEncodingException, FileNotFoundException, P2Exceptions.ImproperHeaderFileException {
         ArrayList<CombinationEntry> recursivePairs = new ArrayList<>();
         RecursiveATM recursiveATM = new RecursiveATM();
         recursiveATM.setBills(intHeader);

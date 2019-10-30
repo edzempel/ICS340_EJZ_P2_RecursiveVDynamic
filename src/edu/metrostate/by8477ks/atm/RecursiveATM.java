@@ -1,9 +1,12 @@
 package edu.metrostate.by8477ks.atm;
 
+import java.util.Arrays;
+
 /**
  * Calculate the number of combinations of bills that add up to a given amount
  * RecursiveATM objects default to U.S. currency {$1, $5, $10, $20, $50, $100},
  * but can be altered to any country's currency
+ *
  * @author ezempel
  * Based on code found at https://www.youtube.com/watch?v=k4y5Pr0YVhg
  */
@@ -11,21 +14,33 @@ public class RecursiveATM {
 
     private int[] bills = {1, 5, 10, 20, 50, 100};
 
-    public void setBills(int[] bills) {
-        this.bills = bills;
+    public int[] getBills() {
+        return bills;
+    }
+
+    public void setBills(int[] bills) throws P2Exceptions.ImproperHeaderFileException {
+        if (bills != null) {
+            Arrays.sort(bills);
+            if (Arrays.binarySearch(bills, 0) >= 0) {
+                throw new P2Exceptions.ImproperHeaderFileException("Bill value of $0 is not allowed");
+            }
+            this.bills = bills;
+        }
     }
 
     public static void main(String[] args) {
-        for(int i = 0; i < 200; i++){
-        System.out.printf("$%d has %d combinations\n", i, new RecursiveATM().rCombinations(i, 0));}
+        for (int i = 0; i < 200; i++) {
+            System.out.printf("$%d has %d combinations\n", i, new RecursiveATM().rCombinations(i, 0));
+        }
 
     }
 
     /**
+     * Reursively calcualates the number of possible combinations to make the given amount of money
      *
-     * @param amount Total amount of money
+     * @param amount      Total amount of money
      * @param currentBill The starting bill in the
-     * @return
+     * @return number of combinations
      */
     public int rCombinations(int amount, int currentBill) {
         if (amount == 0) // found valid combination
