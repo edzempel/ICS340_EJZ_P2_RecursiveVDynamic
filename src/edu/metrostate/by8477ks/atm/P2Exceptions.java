@@ -1,5 +1,8 @@
 package edu.metrostate.by8477ks.atm;
 
+/**
+ * Shared exception classes
+ */
 public class P2Exceptions {
 
     /**
