@@ -22,6 +22,16 @@ class RecursiveATMTest {
     }
 
     @Test
+    void sortedBills() throws P2Exceptions.ImproperHeaderFileException {
+        int[] sortedBills = {1, 5, 10, 20, 50, 100};
+        int[] unsortedBills = {5, 100, 1, 20, 10, 50};
+        recursiveATM.setBills(unsortedBills);
+        for (int i = 0; i < sortedBills.length; i++) {
+            assertEquals(sortedBills[i], recursiveATM.getBills()[i]);
+        }
+    }
+
+    @Test
     void setBills() {
         int[] bills = {0, 1, 2, 3, 4, 5};
         assertThrows(P2Exceptions.ImproperHeaderFileException.class, () -> {
