@@ -26,6 +26,7 @@ public class Controller implements ActionListener {
 
             // open and read file into memory as ArrayList
             try {
+                view.ta1.append("\nProcessing...");
                 processFiles();
             } catch (WrongFileTypeException wftex) {
                 view.ta1.append("\n" + wftex.getMessage());
