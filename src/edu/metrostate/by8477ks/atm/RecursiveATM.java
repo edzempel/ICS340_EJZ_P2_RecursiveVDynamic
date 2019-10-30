@@ -18,6 +18,11 @@ public class RecursiveATM {
         return bills;
     }
 
+    /**
+     * Set allowed bills. This method automatically sorts them least to greatest
+     * @param bills
+     * @throws P2Exceptions.ImproperHeaderFileException
+     */
     public void setBills(int[] bills) throws P2Exceptions.ImproperHeaderFileException {
         if (bills != null) {
             Arrays.sort(bills);
@@ -39,7 +44,7 @@ public class RecursiveATM {
      * Reursively calcualates the number of possible combinations to make the given amount of money
      *
      * @param amount      Total amount of money
-     * @param currentBill The starting bill in the
+     * @param currentBill The starting bill in the array of allowed bills
      * @return number of combinations
      */
     public int rCombinations(int amount, int currentBill) {
