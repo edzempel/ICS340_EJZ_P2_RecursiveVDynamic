@@ -151,9 +151,8 @@ public class Controller implements ActionListener {
         return writeArrayToFile(directory, fileName + "_recursive" + extension, recursivePairs);
     }
 
-    private String dynamicCombinations(String fileName, String extension, String directory, int[] intHeader, int[] intAmounts) throws UnsupportedEncodingException, FileNotFoundException {
+    private String dynamicCombinations(String fileName, String extension, String directory, int[] intHeader, int[] intAmounts) throws UnsupportedEncodingException, FileNotFoundException, P2Exceptions.ImproperHeaderFileException {
         ArrayList<CombinationEntry> dynamicPairs = new ArrayList<>();
-//        DynamicATM dynamicATM = new DynamicATM();
 
         Timer fullDynamicTimer = new Timer();
         Timer dynamicTimer = new Timer();

@@ -31,6 +31,8 @@ public class RecursiveATM {
             }
             this.bills = bills;
         }
+        else
+            throw new P2Exceptions.ImproperHeaderFileException("List of bills cannot be empty");
     }
 
     public static void main(String[] args) {

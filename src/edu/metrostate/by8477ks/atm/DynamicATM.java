@@ -1,6 +1,8 @@
 package edu.metrostate.by8477ks.atm;
 
 
+import java.util.Arrays;
+
 /**
  * Use dynamic programming to count the combinations of given values that total an amount
  *
@@ -14,8 +16,13 @@ class DynamicATM {
      * @param args command line arguments
      */
     public static void main(String[] args) {
-        for (int i = 0; i < 200; i++)
-            System.out.printf("$%d has %d combinations\n", i, dCombinations(i, new int[]{5, 10, 20, 50, 100}));
+        for (int i = 0; i < 200; i++) {
+            try {
+                System.out.printf("$%d has %d combinations\n", i, dCombinations(i, new int[]{5, 10, 20, 50, 100}));
+            } catch (P2Exceptions.ImproperHeaderFileException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -27,7 +34,16 @@ class DynamicATM {
      * @return combinations of bills that total the amount
      */
 
-    public static int dCombinations(int amount, int[] bills) {
+    public static int dCombinations(int amount, int[] bills) throws P2Exceptions.ImproperHeaderFileException {
+        if (bills != null) {
+            Arrays.sort(bills);
+            if (Arrays.binarySearch(bills, 0) >= 0) {
+                throw new P2Exceptions.ImproperHeaderFileException("Bill value of $0 is not allowed");
+            }
+        }
+        else
+            throw new P2Exceptions.ImproperHeaderFileException("List of bills cannot be empty");
+
         int[] combinations = new int[amount + 1];
 
         combinations[0] = 1;
